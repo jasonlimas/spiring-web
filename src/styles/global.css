@@ -68,6 +68,13 @@ html:has(dialog[open]) {
   overflow: hidden;
 }
 
+/* The tilted marquee and rotated photos deliberately poke past the screen edge;
+   clip them so the page never scrolls sideways. (clip, unlike hidden, keeps
+   position: sticky working.) */
+main {
+  overflow-x: clip;
+}
+
 body {
   margin: 0;
   background: var(--cream);
