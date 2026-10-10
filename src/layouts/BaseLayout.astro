@@ -1,0 +1,88 @@
+---
+import '@fontsource-variable/archivo/wdth.css';
+import '@fontsource-variable/plus-jakarta-sans';
+import '../styles/global.css';
+import SiteHeader, { type NavLink } from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import { site } from '../data/site';
+
+interface Props {
+  title: string;
+  description?: string;
+  nav: NavLink[];
+  cta?: { href: string; label: string };
+  compactFooter?: boolean;
+}
+
+const {
+  title,
+  description = site.description,
+  nav,
+  cta = { href: '/#pesan', label: 'Pesan antar' },
+  compactFooter = false,
+} = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogImage = new URL('/og-image.jpg', Astro.site);
+---
+
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta name="theme-color" content="#2b2522" />
+
+    <link rel="icon" href="/favicon.ico" sizes="48x48" />
+    <link rel="icon" href="/icon-512.png" type="image/png" sizes="512x512" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="id_ID" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- Runs before first paint so reveal-on-scroll elements start hidden, not flash. -->
+    <script is:inline>
+      document.documentElement.classList.add('js');
+    </script>
+
+    <slot name="head" />
+  </head>
+  <body>
+    <SiteHeader links={nav} cta={cta} />
+    <main id="konten">
+      <slot />
+    </main>
+    <SiteFooter compact={compactFooter} />
+
+    <script>
+      // Reveal [data-reveal] elements the first time they scroll into view.
+      const targets = document.querySelectorAll('[data-reveal]');
+      if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver(
+          (entries) => {
+            for (const entry of entries) {
+              if (!entry.isIntersecting) continue;
+              entry.target.classList.add('is-visible');
+              observer.unobserve(entry.target);
+            }
+          },
+          { rootMargin: '0px 0px -10% 0px', threshold: 0.1 },
+        );
+        targets.forEach((el) => observer.observe(el));
+      } else {
+        targets.forEach((el) => el.classList.add('is-visible'));
+      }
+    </script>
+  </body>
+</html>

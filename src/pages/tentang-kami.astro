@@ -1,0 +1,87 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+import { site } from '../data/site';
+import { mainNav } from '../data/nav';
+---
+
+<BaseLayout
+  title={`Tentang Kami — ${site.name}`}
+  description="Dari bekal kantor yang dimasak Papa di rumah, jadi Spiring Ayam Bumbu khas Jawa Tengah."
+  nav={mainNav('/tentang-kami/')}
+  compactFooter
+>
+  <article class="story">
+    <h1 class="display story__title">Dari bekal kantor, jadi <span>Spiring.</span></h1>
+
+    <p>
+      Ayam yang kami sajikan sekarang dulunya adalah bekal kami waktu masih sibuk kerja kantoran.
+      Papa yang masak di rumah, dan itu sangat-sangat membantu: makan siang jadi nggak ribet.
+      Bumbunya juga nggak aneh-aneh, dominan bawang putih.
+    </p>
+
+    <p>
+      Sosok paling berjasa itu Papa. Spiring Ayam Bumbu adalah resep khas beliau, yang sudah
+      puluhan tahun tinggal di Semarang, Solo, Sukabumi, dan Bandung. Kami mau semua orang
+      merasakan kehangatan yang kami rasakan dari masakan Papa.
+    </p>
+
+    <p>
+      Sayur asem Papa juga enak banget, pasti ngingetin sama resep keluarga. Hampir tiap hari kami
+      makan bekal dari Papa. Dari situ terpikirlah:
+    </p>
+
+    <blockquote>“Wah, enak ya. Coba kalau semua orang juga bisa makan ini.”</blockquote>
+
+    <p>
+      Setelah akhirnya resign dari kantor swasta ternama di Jakarta Barat, berdirilah Spiring Ayam
+      Bumbu khas Jawa Tengah: ayam goreng lembut yang rasanya unik dan enak.
+    </p>
+
+    <a class="btn btn--primary story__cta" href="/#menu">
+      Lihat menu
+      <Icon name="arrow-right" size={20} strokeWidth={2.4} />
+    </a>
+  </article>
+</BaseLayout>
+
+<style>
+  .story {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    max-width: calc(680px + var(--gutter) * 2);
+    margin-inline: auto;
+    padding: clamp(56px, 8vw, 104px) var(--gutter) clamp(64px, 9vw, 120px);
+  }
+
+  .story__title {
+    margin-bottom: 10px;
+    font-size: clamp(32px, 4.4vw, 56px);
+  }
+
+  .story__title span {
+    color: var(--red);
+  }
+
+  .story p {
+    font-size: 18px;
+    line-height: 1.75;
+    color: var(--ink-soft);
+  }
+
+  .story blockquote {
+    margin-block: 10px;
+    font-family: var(--font-display);
+    font-stretch: 112%;
+    font-weight: 800;
+    font-size: clamp(24px, 3vw, 32px);
+    line-height: 1.25;
+    color: var(--red-strong);
+  }
+
+  .story__cta {
+    align-self: flex-start;
+    margin-top: 14px;
+  }
+</style>

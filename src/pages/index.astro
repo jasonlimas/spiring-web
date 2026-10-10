@@ -1,0 +1,51 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/home/Hero.astro';
+import Marquee from '../components/home/Marquee.astro';
+import MenuSection from '../components/home/MenuSection.astro';
+import WhySection from '../components/home/WhySection.astro';
+import BumbuSection from '../components/home/BumbuSection.astro';
+import OrderSection from '../components/home/OrderSection.astro';
+import LocationSection from '../components/home/LocationSection.astro';
+import InstagramSection from '../components/home/InstagramSection.astro';
+import { site } from '../data/site';
+import { mainNav } from '../data/nav';
+
+// Restaurant details for Google (address, hours, links).
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'Restaurant',
+  name: site.name,
+  description: site.description,
+  servesCuisine: 'Indonesian',
+  url: Astro.site?.href,
+  image: new URL('/og-image.jpg', Astro.site).href,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: `${site.address.building}, ${site.address.unit}`,
+    addressLocality: site.address.area,
+    addressRegion: site.address.region,
+    addressCountry: site.address.country,
+  },
+  openingHoursSpecification: {
+    '@type': 'OpeningHoursSpecification',
+    dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+    opens: site.hours.opens,
+    closes: site.hours.closes,
+  },
+  hasMap: site.links.maps,
+  sameAs: [site.links.instagram, site.links.threads],
+};
+---
+
+<BaseLayout title={`${site.name} — Ayam Goreng Unik & Lebih Sehat`} nav={mainNav('/')}>
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+  <Hero />
+  <Marquee />
+  <MenuSection />
+  <WhySection />
+  <BumbuSection />
+  <OrderSection />
+  <LocationSection />
+  <InstagramSection />
+</BaseLayout>

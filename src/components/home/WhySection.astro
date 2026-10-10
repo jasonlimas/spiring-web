@@ -1,0 +1,96 @@
+---
+const points = [
+  {
+    title: 'Khas Jawa Tengah',
+    text: 'Ayam pejantan goreng tanpa bumbu kuning. Bukan ayam goreng basah, tapi teksturnya lembut.',
+  },
+  {
+    title: 'Digoreng pakai minyak kelapa',
+    text: 'Bikin aromanya wangi dan rasanya unik, beda dari ayam goreng biasa.',
+  },
+  {
+    title: 'Anak-anak juga suka',
+    text: 'Dagingnya lembut banget, sampai anak-anak sering minta makan bareng orang tuanya.',
+  },
+];
+---
+
+<section class="section on-dark">
+  <div class="container why">
+    <h2 class="display why__title" data-reveal>
+      <span class="why__accent">Unik &amp;</span>
+      <span>Lebih</span>
+      <span>Sehat.</span>
+    </h2>
+
+    <ol class="why__list" data-reveal="stagger">
+      {
+        points.map((point, i) => (
+          <li class="why__item">
+            <span class="why__num" aria-hidden="true">
+              {String(i + 1).padStart(2, '0')}
+            </span>
+            <div>
+              <h3 class="card-title">{point.title}</h3>
+              <p>{point.text}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<style>
+  .why {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: clamp(32px, 5vw, 72px);
+  }
+
+  .why__title {
+    display: flex;
+    flex: 1 1 440px;
+    flex-direction: column;
+    min-width: 0;
+    font-size: clamp(52px, 7.6vw, 108px);
+    line-height: 0.92;
+  }
+
+  .why__accent {
+    color: var(--yellow);
+  }
+
+  .why__list {
+    flex: 1 1 420px;
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-bottom: 1px solid var(--tray-line);
+  }
+
+  .why__item {
+    display: flex;
+    gap: 20px;
+    padding: 22px 0;
+    border-top: 1px solid var(--tray-line);
+  }
+
+  .why__num {
+    flex-shrink: 0;
+    width: 36px;
+    padding-top: 3px;
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: 15px;
+    color: var(--yellow);
+  }
+
+  .why__item p {
+    margin-top: 6px;
+    line-height: 1.6;
+    color: var(--on-tray-muted);
+  }
+</style>

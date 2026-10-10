@@ -1,0 +1,146 @@
+---
+import { Picture } from 'astro:assets';
+import Icon from '../Icon.astro';
+import photo from '../../assets/photos/plate-tiles.jpg';
+import { site } from '../../data/site';
+---
+
+<section id="lokasi" class="section tile-wall">
+  <div class="container location">
+    <div class="location__card" data-reveal>
+      <h2 class="display location__title">Mampir ke Spiring.</h2>
+
+      <div class="location__row">
+        <span class="location__icon"><Icon name="pin" /></span>
+        <address>
+          <strong>{site.address.building}</strong>
+          <span>{site.address.area}, {site.address.city}</span>
+          <span>{site.address.unit}</span>
+        </address>
+      </div>
+
+      <div class="location__row">
+        <span class="location__icon"><Icon name="clock" /></span>
+        <div>
+          <strong>Jam buka</strong>
+          <span class="location__hours">{site.hours.label}</span>
+        </div>
+      </div>
+
+      <div class="location__actions">
+        <a class="btn btn--primary" href={site.links.maps}>
+          <Icon name="pin" size={20} />
+          Buka Google Maps
+        </a>
+        <a class="btn btn--light" href={site.links.instagram}>
+          <Icon name="star" size={20} />
+          Lihat review
+        </a>
+      </div>
+    </div>
+
+    <div class="location__photo" data-reveal>
+      <Picture
+        src={photo}
+        alt="Sepiring ayam bumbu di meja Spiring, dengan dinding keramik bergaris oranye"
+        widths={[400, 600, 900]}
+        sizes="(min-width: 900px) 460px, 90vw"
+        formats={['avif', 'webp']}
+      />
+    </div>
+  </div>
+</section>
+
+<style>
+  .location {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 48px;
+  }
+
+  .location__card {
+    display: flex;
+    flex: 1 1 440px;
+    flex-direction: column;
+    gap: 24px;
+    min-width: 0;
+    padding: clamp(24px, 4vw, 48px);
+    border: 2px solid var(--ink);
+    border-radius: 28px;
+    background: var(--cream);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .location__title {
+    font-size: clamp(30px, 4vw, 52px);
+  }
+
+  .location__row {
+    display: flex;
+    gap: 16px;
+  }
+
+  .location__row address,
+  .location__row > div {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    font-style: normal;
+    line-height: 1.5;
+    color: var(--ink-soft);
+  }
+
+  .location__row strong {
+    font-size: 18px;
+    color: var(--ink);
+  }
+
+  .location__hours {
+    font-size: 18px;
+  }
+
+  .location__icon {
+    display: flex;
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: var(--blush);
+    color: var(--red-text);
+  }
+
+  .location__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding-top: 4px;
+  }
+
+  .location__photo {
+    display: flex;
+    flex: 1 1 380px;
+    justify-content: center;
+    min-width: 0;
+  }
+
+  .location__photo :global(picture) {
+    width: 100%;
+    max-width: 480px;
+    padding: 10px;
+    border: 2px solid var(--ink);
+    border-radius: 28px;
+    background: var(--paper);
+    box-shadow: var(--shadow-lg);
+    transform: rotate(2deg);
+  }
+
+  .location__photo :global(img) {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    border-radius: 20px;
+  }
+</style>

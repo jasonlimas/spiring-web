@@ -1,0 +1,46 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { site } from '../data/site';
+import { mainNav } from '../data/nav';
+---
+
+<BaseLayout title={`Halaman tidak ditemukan — ${site.name}`} nav={mainNav('')} compactFooter>
+  <section class="not-found tile-wall">
+    <div class="not-found__card">
+      <h1 class="display">Piringnya kosong.</h1>
+      <p>Halaman yang kamu cari nggak ada. Mungkin sudah dipindah atau alamatnya salah ketik.</p>
+      <a class="btn btn--primary" href="/">Kembali ke beranda</a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .not-found {
+    display: flex;
+    justify-content: center;
+    padding: clamp(64px, 10vw, 140px) var(--gutter);
+  }
+
+  .not-found__card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 18px;
+    max-width: 560px;
+    padding: clamp(24px, 4vw, 48px);
+    border: 2px solid var(--ink);
+    border-radius: 28px;
+    background: var(--cream);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .not-found__card h1 {
+    font-size: clamp(30px, 4vw, 48px);
+  }
+
+  .not-found__card p {
+    font-size: 18px;
+    line-height: 1.6;
+    color: var(--ink-soft);
+  }
+</style>

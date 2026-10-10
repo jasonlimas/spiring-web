@@ -1,0 +1,361 @@
+---
+import { Image } from 'astro:assets';
+import Icon from './Icon.astro';
+import logo from '../assets/brand/logo-red.png';
+import { site, linkOr } from '../data/site';
+
+export interface NavLink {
+  href: string;
+  label: string;
+  current?: boolean;
+}
+
+interface Props {
+  links: NavLink[];
+  cta: { href: string; label: string };
+}
+
+const { links, cta } = Astro.props;
+---
+
+<div class="ribbon">
+  <span class="ribbon__tag">{site.hashtag}</span>
+  <span>{site.address.building}, {site.address.area}</span>
+</div>
+
+<header class="site-header">
+  <div class="container site-header__bar">
+    <a class="site-header__logo" href="/" aria-label={`${site.shortName} — beranda`}>
+      <Image src={logo} alt="" height={48} densities={[1, 2]} loading="eager" />
+    </a>
+
+    <nav class="site-header__nav" aria-label="Navigasi utama">
+      {
+        links.map((link) => (
+          <a class="nav-link" href={link.href} aria-current={link.current ? 'page' : undefined}>
+            {link.label}
+          </a>
+        ))
+      }
+      <a class="btn btn--primary btn--sm" href={cta.href}>{cta.label}</a>
+    </nav>
+
+    <div class="site-header__mobile">
+      <a class="btn btn--primary btn--sm" href={cta.href}>{cta.label}</a>
+      <button
+        class="icon-btn"
+        type="button"
+        aria-label="Buka menu"
+        aria-haspopup="dialog"
+        aria-expanded="false"
+        aria-controls="menu-drawer"
+        data-drawer-open
+      >
+        <Icon name="menu" strokeWidth={2.4} />
+      </button>
+    </div>
+  </div>
+</header>
+
+<dialog id="menu-drawer" class="drawer" aria-label="Menu">
+  <div class="drawer__panel">
+    <div class="drawer__head">
+      <Image src={logo} alt={site.shortName} height={40} densities={[1, 2]} />
+      <button class="icon-btn" type="button" aria-label="Tutup menu" data-drawer-close>
+        <Icon name="close" strokeWidth={2.4} />
+      </button>
+    </div>
+
+    <nav class="drawer__nav" aria-label="Navigasi utama">
+      {
+        links.map((link) => (
+          <a class="drawer__link" href={link.href} aria-current={link.current ? 'page' : undefined}>
+            {link.label}
+            <Icon name="arrow-right" size={20} strokeWidth={2.4} />
+          </a>
+        ))
+      }
+    </nav>
+
+    <div class="drawer__foot">
+      <a class="btn btn--primary" href={site.links.maps}>
+        <Icon name="pin" size={20} />
+        Lokasi
+      </a>
+      <a class="btn btn--light" href={linkOr(site.links.whatsapp)}>
+        <Icon name="chat" size={20} />
+        WhatsApp
+      </a>
+      <p class="drawer__tag">{site.hashtag}</p>
+    </div>
+  </div>
+</dialog>
+
+<script>
+  const drawer = document.getElementById('menu-drawer') as HTMLDialogElement | null;
+  const openButton = document.querySelector<HTMLButtonElement>('[data-drawer-open]');
+
+  if (drawer && openButton) {
+    openButton.addEventListener('click', () => {
+      drawer.showModal();
+      openButton.setAttribute('aria-expanded', 'true');
+    });
+
+    drawer.addEventListener('close', () => openButton.setAttribute('aria-expanded', 'false'));
+
+    drawer.querySelectorAll('[data-drawer-close]').forEach((button) =>
+      button.addEventListener('click', () => drawer.close()),
+    );
+
+    // The panel fills the dialog, so a click on the dialog itself is a click on the backdrop.
+    drawer.addEventListener('click', (event) => {
+      if (event.target === drawer) drawer.close();
+    });
+
+    // For links to a section of the current page, close the drawer first, then
+    // scroll. Otherwise closing returns focus to the burger and jumps back up.
+    drawer.querySelectorAll<HTMLAnchorElement>('a[href*="#"]').forEach((link) =>
+      link.addEventListener('click', (event) => {
+        const url = new URL(link.href);
+        if (url.pathname !== location.pathname) return;
+        const target = document.querySelector(url.hash);
+        if (!target) return;
+        event.preventDefault();
+        drawer.close();
+        history.pushState(null, '', url.hash);
+        target.scrollIntoView();
+      }),
+    );
+
+    // Rotating a tablet to landscape shows the full nav, so drop the drawer.
+    matchMedia('(min-width: 800px)').addEventListener('change', (event) => {
+      if (event.matches && drawer.open) drawer.close();
+    });
+  }
+</script>
+
+<style>
+  .ribbon {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2px 16px;
+    padding: 9px 16px;
+    background: var(--tray);
+    color: var(--on-tray);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    text-align: center;
+  }
+
+  .ribbon__tag {
+    color: var(--yellow);
+    font-weight: 800;
+  }
+
+  .site-header {
+    background: var(--cream);
+    border-bottom: 2px solid var(--ink);
+  }
+
+  .site-header__bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding-block: 12px;
+  }
+
+  .site-header__logo {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+    flex-shrink: 0;
+  }
+
+  .site-header__logo img {
+    height: 48px;
+    width: auto;
+  }
+
+  .site-header__nav {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .site-header__nav .btn {
+    margin-left: 8px;
+  }
+
+  .nav-link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0 12px;
+    font-weight: 700;
+    font-size: 15px;
+    text-decoration: none;
+    text-decoration-color: var(--red);
+    text-decoration-thickness: 3px;
+    text-underline-offset: 6px;
+  }
+
+  .nav-link:hover,
+  .nav-link[aria-current='page'] {
+    text-decoration-line: underline;
+  }
+
+  .nav-link[aria-current='page'] {
+    font-weight: 800;
+  }
+
+  .site-header__mobile {
+    display: none;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .icon-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 46px;
+    height: 46px;
+    padding: 0;
+    border: 2px solid var(--ink);
+    border-radius: 14px;
+    background: var(--paper);
+    color: var(--ink);
+    box-shadow: var(--shadow-sm);
+    cursor: pointer;
+  }
+
+  .icon-btn:active {
+    transform: translateY(2px);
+    box-shadow: 0 1px 0 var(--ink);
+  }
+
+  @media (max-width: 799px) {
+    .site-header__nav {
+      display: none;
+    }
+
+    .site-header__mobile {
+      display: flex;
+    }
+  }
+
+  /* ---------- Drawer ---------- */
+  .drawer {
+    inset: 0 0 0 auto;
+    width: min(88vw, 380px);
+    max-width: none;
+    height: 100dvh;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-left: 2px solid var(--ink);
+    background: var(--cream);
+    color: var(--ink);
+    transform: translateX(100%);
+    transition:
+      transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1),
+      overlay 0.3s allow-discrete,
+      display 0.3s allow-discrete;
+  }
+
+  .drawer[open] {
+    transform: translateX(0);
+  }
+
+  @starting-style {
+    .drawer[open] {
+      transform: translateX(100%);
+    }
+  }
+
+  .drawer::backdrop {
+    background: rgb(42 21 8 / 0);
+    transition:
+      background-color 0.3s ease,
+      overlay 0.3s allow-discrete,
+      display 0.3s allow-discrete;
+  }
+
+  .drawer[open]::backdrop {
+    background: rgb(42 21 8 / 0.55);
+  }
+
+  @starting-style {
+    .drawer[open]::backdrop {
+      background: rgb(42 21 8 / 0);
+    }
+  }
+
+  .drawer__panel {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 12px 20px 24px;
+    overflow-y: auto;
+  }
+
+  .drawer__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--ink);
+  }
+
+  .drawer__head img {
+    height: 40px;
+    width: auto;
+  }
+
+  .drawer__nav {
+    display: flex;
+    flex-direction: column;
+    padding-top: 8px;
+  }
+
+  .drawer__link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 60px;
+    border-bottom: 2px dashed var(--line);
+    font-family: var(--font-display);
+    font-stretch: 112%;
+    font-weight: 800;
+    font-size: 20px;
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+
+  .drawer__link[aria-current='page'] {
+    color: var(--red-text);
+  }
+
+  .drawer__foot {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: auto;
+    padding-top: 32px;
+  }
+
+  .drawer__foot .btn {
+    justify-content: center;
+  }
+
+  .drawer__tag {
+    padding-top: 8px;
+    text-align: center;
+    font-weight: 800;
+    color: var(--red-text);
+  }
+</style>

@@ -1,0 +1,245 @@
+---
+import { Picture } from 'astro:assets';
+import Icon from '../Icon.astro';
+import paketImg from '../../assets/photos/paket-ayam.jpg';
+import ayamImg from '../../assets/photos/fryer.jpg';
+import sayurImg from '../../assets/photos/sayur-asem-spread.jpg';
+import esTehImg from '../../assets/photos/es-teh.jpg';
+
+const items = [
+  {
+    name: 'Paket Ayam Bumbu',
+    desc: 'Ayam pejantan goreng, nasi putih, tahu, tempe, timun & bumbu pilihan.',
+    img: paketImg,
+    alt: 'Paket ayam pejantan goreng dengan nasi, tempe, tahu dan bumbu',
+  },
+  {
+    name: 'Ayam Bumbu',
+    desc: 'Ayam pejantan goreng saja, tanpa nasi. Tetap lengkap dengan bumbunya.',
+    img: ayamImg,
+    alt: 'Ayam bumbu baru diangkat dari penggorengan',
+  },
+  {
+    name: 'Sayur Asem',
+    desc: 'Kuah asem segar dengan jagung dan kacang panjang.',
+    img: sayurImg,
+    alt: 'Mangkuk sayur asem dengan jagung di samping piring ayam bumbu',
+    position: 'center 60%',
+  },
+  {
+    name: 'Es Teh Spiring',
+    desc: 'Es teh dingin, pas buat teman ayam dan bumbu pedas.',
+    img: esTehImg,
+    alt: 'Es teh dalam gelas bersablon Spiring',
+    position: 'center 20%',
+  },
+];
+---
+
+<section id="menu" class="section">
+  <div class="container">
+    <div class="menu__head" data-reveal>
+      <div>
+        <h2 class="display section-title">Isi sepiring Spiring.</h2>
+        <p class="lead">
+          Ayam pejantan goreng yang hangat, nasi putih, tahu tempe, lengkap dengan bumbu pedas manis
+          dan pedas asin.
+        </p>
+      </div>
+      <a class="btn btn--light" href="#pesan">
+        Lihat menu lengkap
+        <Icon name="arrow-right" size={20} strokeWidth={2.4} />
+      </a>
+    </div>
+
+    <ul class="menu__grid" role="list" data-reveal="stagger" data-menu-track>
+      {
+        items.map((item) => (
+          <li class="menu-card" data-menu-card>
+            <Picture
+              src={item.img}
+              alt={item.alt}
+              widths={[320, 480, 640, 960]}
+              sizes="(min-width: 1240px) 280px, (min-width: 600px) 45vw, 90vw"
+              formats={['avif', 'webp']}
+              style={item.position ? `object-position: ${item.position}` : undefined}
+            />
+            <div class="menu-card__body">
+              <h3 class="card-title">{item.name}</h3>
+              <p>{item.desc}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ul>
+
+    <!-- Only shown on phones, where the cards become a swipeable row. -->
+    <div class="menu__dots" role="group" aria-label="Pilih menu">
+      {
+        items.map((item, i) => (
+          <button
+            type="button"
+            class="menu__dot"
+            aria-label={`Tampilkan ${item.name}`}
+            aria-current={i === 0 ? 'true' : undefined}
+            data-menu-dot={i}
+          />
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<script>
+  const track = document.querySelector<HTMLElement>('[data-menu-track]');
+  const cards = [...document.querySelectorAll<HTMLElement>('[data-menu-card]')];
+  const dots = [...document.querySelectorAll<HTMLButtonElement>('[data-menu-dot]')];
+
+  if (track && cards.length && dots.length) {
+    const setActive = (index: number) =>
+      dots.forEach((dot, i) =>
+        i === index ? dot.setAttribute('aria-current', 'true') : dot.removeAttribute('aria-current'),
+      );
+
+    // The card that is mostly in view inside the row is the active one.
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) setActive(cards.indexOf(entry.target as HTMLElement));
+        }
+      },
+      { root: track, threshold: 0.6 },
+    );
+    cards.forEach((card) => observer.observe(card));
+
+    dots.forEach((dot, i) =>
+      dot.addEventListener('click', () => {
+        const pad = parseFloat(getComputedStyle(track).scrollPaddingInlineStart) || 0;
+        track.scrollTo({ left: cards[i].offsetLeft - track.offsetLeft - pad });
+      }),
+    );
+  }
+</script>
+
+<style>
+  .menu__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 20px 40px;
+    margin-bottom: 40px;
+  }
+
+  .menu__grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 24px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  @media (max-width: 1023px) {
+    .menu__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  /* Phones: a swipeable row that snaps to each card, with the next card peeking in. */
+  @media (max-width: 599px) {
+    .menu__grid {
+      display: flex;
+      gap: 16px;
+      margin-inline: calc(var(--gutter) * -1);
+      padding: 0 var(--gutter) 12px; /* bottom room for the card shadows */
+      overflow-x: auto;
+      overscroll-behavior-x: contain;
+      scroll-snap-type: x mandatory;
+      scroll-padding-inline: var(--gutter);
+      scrollbar-width: none;
+    }
+
+    .menu__grid::-webkit-scrollbar {
+      display: none;
+    }
+
+    .menu-card {
+      flex: 0 0 82%;
+      scroll-snap-align: start;
+    }
+  }
+
+  .menu__dots {
+    display: none;
+    justify-content: center;
+    gap: 4px;
+    margin-top: 12px;
+  }
+
+  @media (max-width: 599px) {
+    .menu__dots {
+      display: flex;
+    }
+  }
+
+  /* 28px tap target around a small visible dot. */
+  .menu__dot {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+  }
+
+  .menu__dot::before {
+    content: '';
+    width: 10px;
+    height: 10px;
+    border: 2px solid var(--ink);
+    border-radius: 999px;
+    background: var(--paper);
+    transition:
+      width 0.2s ease,
+      background-color 0.2s ease;
+  }
+
+  .menu__dot[aria-current='true']::before {
+    width: 26px;
+    background: var(--red-strong);
+  }
+
+  .menu-card {
+    display: flex;
+    flex-direction: column;
+    padding: 12px;
+    border: 2px solid var(--ink);
+    border-radius: 24px;
+    background: var(--paper);
+    box-shadow: 0 6px 0 var(--ink);
+  }
+
+  .menu-card :global(img) {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: 16px;
+  }
+
+  .menu-card__body {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 16px 8px 6px;
+  }
+
+  .menu-card__body p {
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--muted);
+  }
+</style>

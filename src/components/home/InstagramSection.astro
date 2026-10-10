@@ -1,0 +1,105 @@
+---
+import { Picture } from 'astro:assets';
+import Icon from '../Icon.astro';
+import tray from '../../assets/photos/tray.jpg';
+import esTehPaket from '../../assets/photos/es-teh-paket.jpg';
+import fryer2 from '../../assets/photos/fryer-2.jpg';
+import twoPlates from '../../assets/photos/two-plates.jpg';
+import { site } from '../../data/site';
+
+const photos = [
+  { src: tray, alt: 'Dua piring ayam bumbu di atas nampan' },
+  { src: esTehPaket, alt: 'Paket ayam bumbu dengan es teh dan sayur asem' },
+  { src: fryer2, alt: 'Ayam goreng di saringan penggorengan' },
+  { src: twoPlates, alt: 'Dua piring ayam bumbu lengkap dengan bumbu' },
+];
+---
+
+<section class="section instagram">
+  <div class="container">
+    <div class="instagram__head" data-reveal>
+      <h2 class="instagram__handle">{site.links.instagramHandle}</h2>
+      <a class="btn btn--light" href={site.links.instagram}>
+        <Icon name="instagram" size={20} />
+        Ikuti di Instagram
+      </a>
+    </div>
+
+    <ul class="instagram__grid" role="list" data-reveal="stagger">
+      {
+        photos.map((photo) => (
+          <li>
+            <a href={site.links.instagram}>
+              <Picture
+                src={photo.src}
+                alt={photo.alt}
+                widths={[240, 360, 560]}
+                sizes="(min-width: 1024px) 280px, 45vw"
+                formats={['avif', 'webp']}
+              />
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .instagram {
+    border-top: 2px solid var(--ink);
+    padding-block: clamp(64px, 7vw, 96px);
+  }
+
+  .instagram__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 20px 40px;
+    margin-bottom: 32px;
+  }
+
+  .instagram__handle {
+    min-width: 0;
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: clamp(26px, 3.6vw, 48px);
+    line-height: 1.05;
+    overflow-wrap: anywhere;
+  }
+
+  .instagram__grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  @media (max-width: 767px) {
+    .instagram__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  .instagram__grid a {
+    display: block;
+    overflow: hidden;
+    border: 2px solid var(--ink);
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+  }
+
+  .instagram__grid :global(img) {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+
+  .instagram__grid a:hover :global(img) {
+    transform: scale(1.04);
+  }
+</style>

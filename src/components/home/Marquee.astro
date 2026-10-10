@@ -1,0 +1,88 @@
+---
+const items = [
+  'Ayam pejantan',
+  'Khas Jawa Tengah',
+  'Minyak kelapa',
+  'Bumbu Spiring',
+  'Bumbu Bara',
+  'Tahu & tempe',
+  'Nasi putih',
+];
+---
+
+<!-- Two identical groups slide left by exactly one group's width, so the loop is seamless. -->
+<div class="marquee" aria-hidden="true">
+  <div class="marquee__track">
+    {
+      [0, 1].map(() => (
+        <div class="marquee__group">
+          {items.map((item) => (
+            <>
+              <span>{item}</span>
+              <span class="marquee__dot" />
+            </>
+          ))}
+        </div>
+      ))
+    }
+  </div>
+</div>
+
+<style>
+  .marquee {
+    position: relative;
+    width: 104%;
+    margin: -18px -2% 0;
+    padding: 16px 0;
+    overflow: hidden;
+    border-block: 2px solid var(--ink);
+    background: var(--red);
+    transform: rotate(-1.2deg);
+  }
+
+  .marquee__track {
+    display: flex;
+    width: max-content;
+    animation: marquee-slide 45s linear infinite;
+  }
+
+  .marquee:hover .marquee__track {
+    animation-play-state: paused;
+  }
+
+  .marquee__group {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    gap: 26px;
+    /* Same as the gap, so the seam between the two groups is invisible. */
+    padding-right: 26px;
+    white-space: nowrap;
+    font-family: var(--font-display);
+    font-stretch: 125%;
+    font-weight: 900;
+    font-size: clamp(20px, 2.4vw, 26px);
+    text-transform: uppercase;
+    color: #fff;
+  }
+
+  .marquee__dot {
+    flex-shrink: 0;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--yellow);
+  }
+
+  @keyframes marquee-slide {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .marquee__track {
+      animation: none;
+    }
+  }
+</style>

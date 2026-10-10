@@ -1,0 +1,190 @@
+---
+// Each card's bowl shows the real colour of that bumbu.
+const bumbu = [
+  {
+    kicker: 'Bumbu pedas manis',
+    name: 'Spiring',
+    text: 'Dibuat pakai gula jawa. Rasanya manis, gurih, dan sedikit pedas.',
+    variant: 'spiring',
+  },
+  {
+    kicker: 'Bumbu pedas asin',
+    name: 'Bara',
+    text: 'Dibuat pakai terasi. Jadi lebih gurih dan lebih pedas.',
+    variant: 'bara',
+  },
+  {
+    kicker: 'Paling sering dicoba',
+    name: 'Campur!',
+    text: 'Bingung pilih yang mana? Customer kami paling sering campur keduanya: Spiring + Bara.',
+    variant: 'campur',
+  },
+];
+---
+
+<section id="bumbu" class="section bumbu">
+  <div class="container">
+    <div class="bumbu__head" data-reveal>
+      <div>
+        <h2 class="display section-title">Bumbu, bukan sambal.</h2>
+        <p class="lead">
+          Kenapa kami sebut bumbu? Karena rasanya jauh lebih kompleks dibanding sambal pada
+          umumnya. Ada dua pilihan, dua-duanya racikan spesial Papi kami tercinta.
+        </p>
+      </div>
+      <p class="seal">
+        <span class="seal__small">Racikan</span>
+        <span class="seal__big">Papi</span>
+        <span class="seal__small">tercinta</span>
+      </p>
+    </div>
+
+    <ul class="bumbu__grid" role="list" data-reveal="stagger">
+      {
+        bumbu.map((b) => (
+          <li class={`bumbu-card bumbu-card--${b.variant}`}>
+            <span class="bowl" aria-hidden="true">
+              <span class="bowl__fill" />
+            </span>
+            <span class="bumbu-card__kicker">{b.kicker}</span>
+            <h3 class="display bumbu-card__name">{b.name}</h3>
+            <p>{b.text}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .bumbu {
+    border-bottom: 2px solid var(--ink);
+  }
+
+  .bumbu__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px 40px;
+    margin-bottom: 40px;
+  }
+
+  .bumbu__head > div {
+    flex: 1 1 520px;
+    min-width: 0;
+  }
+
+  .bumbu__head .lead {
+    max-width: 600px;
+  }
+
+  .seal {
+    display: flex;
+    flex-shrink: 0;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 150px;
+    height: 150px;
+    border: 2px solid var(--ink);
+    border-radius: 50%;
+    background: var(--yellow);
+    box-shadow: var(--shadow);
+    transform: rotate(-8deg);
+    font-family: var(--font-display);
+    font-weight: 900;
+    line-height: 1.05;
+    text-align: center;
+    text-transform: uppercase;
+  }
+
+  .seal__small {
+    font-size: 12px;
+    letter-spacing: 0.08em;
+  }
+
+  .seal__big {
+    font-size: 32px;
+    font-stretch: 125%;
+  }
+
+  .bumbu__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+    gap: 24px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .bumbu-card {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 28px;
+    border: 2px solid var(--ink);
+    border-radius: 28px;
+    box-shadow: 0 6px 0 var(--ink);
+  }
+
+  .bumbu-card--spiring {
+    --fill: var(--bumbu-spiring);
+    background: var(--red-strong);
+    color: #fff;
+  }
+
+  .bumbu-card--bara {
+    --fill: var(--bumbu-bara);
+    background: var(--tray);
+    color: var(--on-tray);
+  }
+
+  .bumbu-card--bara .bumbu-card__kicker,
+  .bumbu-card--bara .bumbu-card__name {
+    color: var(--yellow);
+  }
+
+  .bumbu-card--campur {
+    --fill: linear-gradient(90deg, var(--bumbu-spiring) 50%, var(--bumbu-bara) 50%);
+    background: var(--yellow);
+    color: var(--ink);
+  }
+
+  /* A small bowl of bumbu: cream rim, coloured fill. */
+  .bowl {
+    display: block;
+    width: 88px;
+    height: 88px;
+    padding: 9px;
+    border: 2px solid var(--ink);
+    border-radius: 50%;
+    background: var(--plate);
+  }
+
+  .bowl__fill {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: 2px solid var(--ink);
+    border-radius: 50%;
+    background: var(--fill);
+  }
+
+  .bumbu-card__kicker {
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .bumbu-card__name {
+    font-size: clamp(30px, 3vw, 40px);
+  }
+
+  .bumbu-card p {
+    font-size: 17px;
+    font-weight: 500;
+    line-height: 1.55;
+  }
+</style>

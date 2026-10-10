@@ -1,0 +1,248 @@
+---
+import { Picture } from 'astro:assets';
+import Icon from '../Icon.astro';
+import plateImg from '../../assets/photos/plate-close.jpg';
+import polaroidImg from '../../assets/photos/yellow-plate.jpg';
+import { site, linkOr } from '../../data/site';
+
+const links = [
+  {
+    href: site.links.maps,
+    label: 'Lokasi',
+    sub: `${site.address.building}, ${site.address.area}`,
+    icon: 'pin',
+    primary: true,
+  },
+  { href: linkOr(site.links.grabfood), label: 'GrabFood', sub: 'Pesan antar', icon: 'bag' },
+  { href: linkOr(site.links.gofood), label: 'GoFood', sub: 'Pesan antar', icon: 'bag' },
+  {
+    href: linkOr(site.links.whatsapp),
+    label: 'Corporate orders',
+    sub: 'Pesanan kantor & acara via WhatsApp',
+    icon: 'briefcase',
+  },
+] as const;
+---
+
+<section class="hero tile-wall">
+  <div class="container hero__grid">
+    <div class="hero__copy">
+      <h1 class="display hero__title">
+        Ayam goreng <span class="hero__accent">unik</span> &amp; lebih sehat.
+      </h1>
+      <p class="hero__lead">
+        Menunya simple, tapi rasanya nyaman banget ala rumahan. Ayam pejantan goreng khas Jawa
+        Tengah, nasi putih, tahu tempe, dan bumbu racikan Papi.
+      </p>
+
+      <ul class="hero__links" role="list">
+        {
+          links.map((link) => (
+            <li>
+              <a class:list={['link-card', { 'link-card--primary': 'primary' in link }]} href={link.href}>
+                <span class="link-card__icon">
+                  <Icon name={link.icon} />
+                </span>
+                <span class="link-card__text">
+                  <span class="link-card__label">{link.label}</span>
+                  <span class="link-card__sub">{link.sub}</span>
+                </span>
+                <Icon name="arrow-right" strokeWidth={2.4} />
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    <div class="hero__art">
+      <div class="hero__stage">
+        <div class="plate">
+          <div class="plate__rim">
+            <div class="plate__line">
+              <Picture
+                src={plateImg}
+                alt="Sepiring ayam pejantan goreng dengan nasi, tempe, tahu, bumbu dan timun"
+                widths={[360, 540, 720, 1080]}
+                sizes="(min-width: 900px) 480px, 80vw"
+                formats={['avif', 'webp']}
+                priority
+              />
+            </div>
+          </div>
+        </div>
+
+        <figure class="polaroid">
+          <Picture
+            src={polaroidImg}
+            alt="Ayam bumbu goreng di atas piring kuning"
+            widths={[200, 400]}
+            sizes="(min-width: 900px) 200px, 36vw"
+            formats={['avif', 'webp']}
+          />
+          <figcaption>Ayam bumbu spiring</figcaption>
+        </figure>
+
+        <p class="badge">
+          <span>#Makan</span>
+          <span>Jadi Lebih</span>
+          <span>Mudah</span>
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    padding-block: clamp(48px, 6vw, 80px) clamp(72px, 8vw, 112px);
+  }
+
+  .hero__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    align-items: center;
+    gap: 48px;
+  }
+
+  @media (max-width: 899px) {
+    .hero__grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  .hero__copy {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+  }
+
+  .hero__title {
+    font-size: clamp(36px, 5vw, 66px);
+    line-height: 0.96;
+  }
+
+  .hero__accent {
+    color: var(--red);
+  }
+
+  /* Solid ground so the tile lines don't run through the text. */
+  .hero__lead {
+    max-width: 500px;
+    font-size: 18px;
+    line-height: 1.6;
+    color: var(--ink-soft);
+    background: var(--paper);
+  }
+
+  .hero__links {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    max-width: 480px;
+    margin: 6px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .hero__art {
+    display: flex;
+    justify-content: center;
+  }
+
+  .hero__stage {
+    position: relative;
+    width: 100%;
+    max-width: 540px;
+    aspect-ratio: 1;
+    container-type: inline-size;
+  }
+
+  /* Red rim, cream band, thin red line: the restaurant's plates. */
+  .plate {
+    position: absolute;
+    inset: 3% 3% 7% 7%;
+    padding: 2.4%;
+    border: 2px solid var(--ink);
+    border-radius: 50%;
+    background: var(--red);
+    box-shadow: 0 10px 0 var(--ink);
+  }
+
+  .plate__rim,
+  .plate__line,
+  .plate__line :global(picture) {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+  }
+
+  .plate__rim {
+    padding: 6%;
+    background: var(--plate);
+  }
+
+  .plate__line {
+    padding: 1.2%;
+    background: var(--red);
+  }
+
+  .plate__line :global(img) {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  .polaroid {
+    position: absolute;
+    left: -1%;
+    bottom: 0;
+    width: 38%;
+    padding: 2.4% 2.4% 1.5%;
+    border: 2px solid var(--ink);
+    border-radius: 8px;
+    background: var(--paper);
+    box-shadow: 0 6px 0 var(--ink);
+    transform: rotate(-7deg);
+  }
+
+  .polaroid :global(img) {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border-radius: 4px;
+  }
+
+  .polaroid figcaption {
+    padding: 6px 2px 2px;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(10px, 2.5cqw, 14px);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .badge {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 29%;
+    aspect-ratio: 1;
+    border: 2px solid var(--ink);
+    border-radius: 50%;
+    background: var(--yellow);
+    box-shadow: var(--shadow);
+    transform: rotate(10deg);
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: clamp(10px, 3cqw, 16px);
+    line-height: 1.05;
+    text-align: center;
+    text-transform: uppercase;
+  }
+</style>

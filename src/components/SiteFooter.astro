@@ -1,0 +1,152 @@
+---
+import { Image } from 'astro:assets';
+import logo from '../assets/brand/logo-yellow.png';
+import { site, linkOr } from '../data/site';
+
+interface Props {
+  /** The about page uses a slimmer footer. */
+  compact?: boolean;
+}
+
+const { compact = false } = Astro.props;
+const year = new Date().getFullYear();
+---
+
+<footer class:list={['footer', 'on-dark', { 'footer--compact': compact }]}>
+  <div class="container">
+    {
+      compact ? (
+        <div class="footer__row">
+          <Image src={logo} alt={site.shortName} width={140} densities={[1, 2]} />
+          <nav class="footer__inline" aria-label="Tautan">
+            <a href={site.links.instagram}>Instagram</a>
+            <a href={site.links.maps}>Google Maps</a>
+            <a href={linkOr(site.links.whatsapp)}>WhatsApp</a>
+          </nav>
+        </div>
+      ) : (
+        <div class="footer__row">
+          <div class="footer__brand">
+            <Image src={logo} alt={site.shortName} width={200} densities={[1, 2]} />
+            <p class="footer__tagline">{site.tagline}</p>
+            <p class="footer__tag">{site.hashtag}</p>
+          </div>
+          <div class="footer__cols">
+            <nav aria-label="Sosial media">
+              <p class="footer__heading">Ikuti</p>
+              <a href={site.links.instagram}>Instagram</a>
+              <a href={site.links.threads}>Threads</a>
+            </nav>
+            <nav aria-label="Kontak">
+              <p class="footer__heading">Kunjungi</p>
+              <a href={site.links.maps}>Google Maps</a>
+              <a href={linkOr(site.links.whatsapp)}>WhatsApp</a>
+              <a href="/tentang-kami/">Tentang Kami</a>
+            </nav>
+          </div>
+        </div>
+      )
+    }
+    <div class="footer__bottom">
+      <span>© {year} {site.name}</span>
+      <span>{site.address.building}, {site.address.area}</span>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    padding: 64px 0 28px;
+  }
+
+  .footer--compact {
+    padding-top: 48px;
+  }
+
+  .footer__row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 40px;
+  }
+
+  .footer--compact .footer__row {
+    align-items: center;
+    gap: 24px;
+  }
+
+  .footer__brand {
+    display: flex;
+    flex: 1 1 300px;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .footer__tagline {
+    color: var(--on-tray-muted);
+  }
+
+  .footer__tag {
+    font-weight: 800;
+    color: var(--yellow);
+  }
+
+  .footer__cols {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 48px;
+  }
+
+  .footer__cols nav {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .footer__heading {
+    margin-bottom: 6px;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--yellow);
+  }
+
+  .footer a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    color: var(--on-tray);
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .footer a:hover {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+
+  .footer__inline {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 24px;
+  }
+
+  .footer__bottom {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 8px 24px;
+    margin-top: 40px;
+    padding-top: 24px;
+    border-top: 1px solid var(--tray-line);
+    font-size: 14px;
+    color: #bca994;
+  }
+
+  .footer--compact .footer__bottom {
+    margin-top: 24px;
+    padding-top: 20px;
+  }
+</style>
