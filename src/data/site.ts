@@ -13,27 +13,25 @@ export const site = {
 
   address: {
     building: 'Ruko Golden 8',
-    unit: 'Blok G No. 08',
+    unit: 'Blok G No. 8',
     area: 'Gading Serpong',
     city: 'Tangerang',
+    postalCode: '15810',
     region: 'Banten',
     country: 'ID',
   },
 
   hours: {
     label: '10:00 – 21:00',
-    // TODO: confirm the days. The structured data below assumes every day.
     opens: '10:00',
     closes: '21:00',
   },
 
   links: {
-    maps: 'https://maps.google.com/?q=Spiring+Ayam+Bumbu+Ruko+Golden+8+Gading+Serpong',
-    // TODO: WhatsApp number in international format, e.g. https://wa.me/6281234567890
-    whatsapp: '',
-    // TODO: store links on each delivery app.
-    grabfood: '',
-    gofood: '',
+    maps: 'https://maps.app.goo.gl/J6TojpnqTqjrDFXe6',
+    whatsapp: 'https://wa.me/6281996365359',
+    grabfood: 'https://r.grab.com/g/2-1-6-C7UXJ2E3ENNCDA',
+    gofood: 'https://gofood.link/a/RXLpM55',
     instagram: 'https://www.instagram.com/spiring.ayambumbu/',
     instagramHandle: '@spiring.ayambumbu',
     threads: 'https://www.threads.net/@spiring.ayambumbu',

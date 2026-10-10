@@ -1,0 +1,204 @@
+---
+import Icon from './Icon.astro';
+import { site, linkOr } from '../data/site';
+
+// Opened by any element with data-dialog-open="order-dialog" (the header's "Pesan antar").
+// Bottom sheet on phones, centred modal on wider screens.
+const apps = [
+  { name: 'GrabFood', href: linkOr(site.links.grabfood) },
+  { name: 'GoFood', href: linkOr(site.links.gofood) },
+];
+---
+
+<dialog id="order-dialog" class="sheet" aria-labelledby="order-dialog-title" data-dialog>
+  <div class="sheet__panel">
+    <span class="sheet__handle" aria-hidden="true"></span>
+    <div class="sheet__head">
+      <h2 id="order-dialog-title" class="display sheet__title">Pesan antar</h2>
+      <button class="sheet__close" type="button" aria-label="Tutup" data-dialog-close>
+        <Icon name="close" strokeWidth={2.4} />
+      </button>
+    </div>
+    <p class="sheet__text">Pilih aplikasi favoritmu, lalu cari “{site.name}”.</p>
+
+    <ul class="sheet__apps" role="list">
+      {
+        apps.map((app) => (
+          <li>
+            <a class="link-card sheet__app" href={app.href}>
+              <span class="link-card__icon">
+                <Icon name="bag" size={24} />
+              </span>
+              <span class="link-card__text">
+                <span class="card-title">{app.name}</span>
+                <span class="link-card__sub">Buka di aplikasi</span>
+              </span>
+              <Icon name="arrow-right" strokeWidth={2.4} />
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</dialog>
+
+<style>
+  /* Phones: a sheet that slides up from the bottom edge. */
+  .sheet {
+    inset: auto 0 0 0;
+    width: 100%;
+    max-width: none;
+    max-height: 90dvh;
+    margin: 0;
+    padding: 0;
+    border: 2px solid var(--ink);
+    border-bottom: 0;
+    border-radius: 24px 24px 0 0;
+    background: var(--cream);
+    color: var(--ink);
+    transform: translateY(100%);
+    transition:
+      transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1),
+      opacity 0.3s ease,
+      overlay 0.3s allow-discrete,
+      display 0.3s allow-discrete;
+  }
+
+  .sheet[open] {
+    transform: none;
+  }
+
+  @starting-style {
+    .sheet[open] {
+      transform: translateY(100%);
+    }
+  }
+
+  /* Wider screens: a centred modal that fades and rises in. */
+  @media (min-width: 600px) {
+    .sheet {
+      inset: 0;
+      width: min(440px, calc(100% - 40px));
+      height: fit-content;
+      margin: auto;
+      border-bottom: 2px solid var(--ink);
+      border-radius: 28px;
+      box-shadow: var(--shadow-lg);
+      opacity: 0;
+      transform: translateY(16px) scale(0.98);
+    }
+
+    .sheet[open] {
+      opacity: 1;
+      transform: none;
+    }
+
+    @starting-style {
+      .sheet[open] {
+        opacity: 0;
+        transform: translateY(16px) scale(0.98);
+      }
+    }
+  }
+
+  .sheet::backdrop {
+    background: rgb(42 21 8 / 0);
+    transition:
+      background-color 0.3s ease,
+      overlay 0.3s allow-discrete,
+      display 0.3s allow-discrete;
+  }
+
+  .sheet[open]::backdrop {
+    background: rgb(42 21 8 / 0.55);
+  }
+
+  @starting-style {
+    .sheet[open]::backdrop {
+      background: rgb(42 21 8 / 0);
+    }
+  }
+
+  .sheet__panel {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 12px 20px calc(24px + env(safe-area-inset-bottom));
+  }
+
+  @media (min-width: 600px) {
+    .sheet__panel {
+      padding: 24px 28px 28px;
+    }
+  }
+
+  .sheet__handle {
+    align-self: center;
+    width: 44px;
+    height: 5px;
+    border-radius: 999px;
+    background: var(--line);
+  }
+
+  @media (min-width: 600px) {
+    .sheet__handle {
+      display: none;
+    }
+  }
+
+  .sheet__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .sheet__title {
+    font-size: 28px;
+  }
+
+  .sheet__close {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 2px solid var(--ink);
+    border-radius: 14px;
+    background: var(--paper);
+    box-shadow: var(--shadow-sm);
+    cursor: pointer;
+  }
+
+  .sheet__close:active {
+    transform: translateY(2px);
+    box-shadow: 0 1px 0 var(--ink);
+  }
+
+  .sheet__text {
+    line-height: 1.5;
+    color: var(--ink-soft);
+  }
+
+  .sheet__apps {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin: 6px 0 4px;
+    padding: 0;
+    list-style: none;
+  }
+
+  .sheet__app {
+    min-height: 76px;
+    border-radius: 20px;
+  }
+
+  .sheet__app .link-card__icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+  }
+</style>
