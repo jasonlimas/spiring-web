@@ -4,7 +4,6 @@ import Icon from '../Icon.astro';
 import paketImg from '../../assets/photos/paket-ayam.jpg';
 import ayamImg from '../../assets/photos/fryer.jpg';
 import sayurImg from '../../assets/photos/sayur-asem-spread.jpg';
-import esTehImg from '../../assets/photos/es-teh.jpg';
 
 const items = [
   {
@@ -25,13 +24,6 @@ const items = [
     img: sayurImg,
     alt: 'Mangkuk sayur asem dengan jagung di samping piring ayam bumbu',
     position: 'center 60%',
-  },
-  {
-    name: 'Es Teh Spiring',
-    desc: 'Es teh dingin, pas buat teman ayam dan bumbu pedas.',
-    img: esTehImg,
-    alt: 'Es teh dalam gelas bersablon Spiring',
-    position: 'center 20%',
   },
 ];
 ---
@@ -56,7 +48,7 @@ const items = [
               src={item.img}
               alt={item.alt}
               widths={[320, 480, 640, 960]}
-              sizes="(min-width: 1240px) 280px, (min-width: 600px) 45vw, 90vw"
+              sizes="(min-width: 1240px) 370px, (min-width: 1024px) 30vw, (min-width: 600px) 45vw, 90vw"
               formats={['avif', 'webp']}
               style={item.position ? `object-position: ${item.position}` : undefined}
             />
@@ -129,16 +121,25 @@ const items = [
 
   .menu__grid {
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 24px;
     margin: 0;
     padding: 0;
     list-style: none;
   }
 
+  /* Tablets: two cards per row; a lone last card sits centred under the pair. */
   @media (max-width: 1023px) {
     .menu__grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .menu-card {
+      grid-column: span 2;
+    }
+
+    .menu-card:last-child:nth-child(odd) {
+      grid-column: 2 / span 2;
     }
   }
 
