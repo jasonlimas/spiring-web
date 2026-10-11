@@ -39,7 +39,7 @@ const structuredData = {
 };
 ---
 
-<BaseLayout title={`${site.name} — Ayam Goreng Unik & Lebih Sehat`} nav={mainNav('/')}>
+<BaseLayout title={`${site.name}`} nav={mainNav('/')}>
   <script slot="head" type="application/ld+json" set:html={JSON.stringify(structuredData)} />
   <Hero />
   <Marquee />
